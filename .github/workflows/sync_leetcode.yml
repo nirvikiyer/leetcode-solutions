@@ -1,0 +1,20 @@
+name: Failsafe LeetCode Sync Pipeline
+
+on:
+  workflow_dispatch: # Allows you to force a sync with a manual button click
+  schedule:
+    - cron: "0 8 * * *" # Triggers completely automatically every day at 8:00 AM UTC
+
+jobs:
+  sync-job:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Sync LeetCode Submissions to Default Branch
+        uses: joshcai/leetcode-sync@v1.7
+        with:
+          github-token: ${{ github.token }}
+          leetcode-csrf-token: ${{ secrets.LEETCODE_CSRF_TOKEN }}
+          leetcode-session: ${{ secrets.LEETCODE_SESSION }}
+          destination-folder: "solutions" # Keeps your root repository clean
+          verbose: true                   # Generates clean debugging logs if failures happen
+          commit-header: "[LeetCode Automated Sync]"
